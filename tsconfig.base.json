@@ -13,7 +13,8 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@prisma/*": ["./prisma/*"]
     }
   }
 }

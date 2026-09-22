@@ -1,12 +1,17 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
+import { analysesService } from "@/modules/analysis/analysis.services.js";
 
 export const analysisRouter = express.Router();
+const {
+    getAnalyses
+} = analysesService();
 
 /**
  * Get all analysis
  */
-analysisRouter.get('/', (req: Request, res: Response) => {
-    res.send('Get all analysis');
+analysisRouter.get('/', async (req: Request, res: Response) => {
+    const analyses = await getAnalyses();
+    res.send(analyses);
 });
 
 /**
