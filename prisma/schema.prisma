@@ -5,3 +5,16 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Analysis {
+  id              String   @id @default(uuid()) @db.Uuid
+  file_name       String
+  extracted_text  String
+  job_description String?
+  score           Int
+  breakdown       Json
+  suggestions     String[]
+  created_at      DateTime @default(now())
+
+  @@map("analyses")
+}

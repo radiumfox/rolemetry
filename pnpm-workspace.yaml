@@ -5,6 +5,6 @@ allowBuilds:
   prisma: true
   msgpackr-extract: true
   workerd: true
-  '@scarf/scarf': set this to true or false
+  '@scarf/scarf': false
 
 saveExact: true

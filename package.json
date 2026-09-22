@@ -16,7 +16,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:reset": "prisma migrate reset"
   },
   "dependencies": {
     "@prisma/client": "7.10.0",

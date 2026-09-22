@@ -6,6 +6,18 @@ AI-powered ATS (Applicant Tracking System) score calculator. Upload a CV in `.pd
 
 Built with Express 5, TypeScript, Prisma, and PostgreSQL.
 
+## Setup from a fresh checkout
+
+```bash
+pnpm install
+docker compose up -d        # start Postgres
+pnpm prisma:generate        # generate the Prisma client
+pnpm prisma:migrate         # create + apply the database migration
+pnpm dev                    # run the app in watch mode
+```
+
+Requires a `.env` file with a `DATABASE_URL` pointing at the running Postgres.
+
 ## Database
 
 Start the PostgreSQL database with Docker Compose:

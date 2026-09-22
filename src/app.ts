@@ -1,3 +1,5 @@
+import { API_PREFIX } from './config/constants.js';
+import { analysisRouter } from "@/modules/analysis/index.js";
 import cors from 'cors';
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
@@ -6,6 +8,8 @@ import helmet from 'helmet';
 import { env } from '@/config/env.js';
 
 export const app = express();
+
+app.use(`${API_PREFIX}/analyses`, analysisRouter);
 
 app.disable('x-powered-by');
 
