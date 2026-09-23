@@ -1,5 +1,5 @@
 import { API_PREFIX } from './config/constants.js';
-import { analysisRouter } from "@/modules/analysis/index.js";
+import { analysisRouter } from '@/modules/analysis/index.js';
 import cors from 'cors';
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
