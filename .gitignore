@@ -10,9 +10,6 @@ coverage/
 .env.local
 .env.*.local
 
-# Prisma
-prisma/generated/
-
 # Logs
 *.log
 logs/

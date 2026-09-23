@@ -4,7 +4,17 @@
 
 AI-powered ATS (Applicant Tracking System) score calculator. Upload a CV in `.pdf`, `.docx`, or `.txt` and get an ATS compatibility score calculated against a job description.
 
-Built with Express 5, TypeScript, Prisma, and PostgreSQL.
+Built with Express 5, TypeScript, Pg-Promise, and PostgreSQL.
+
+## Setup from a fresh checkout
+
+```bash
+pnpm install
+docker compose up -d        # start Postgres
+pnpm dev                    # run the app in watch mode
+```
+
+Requires a `.env` file with a `DATABASE_URL` pointing at the running Postgres.
 
 ## Database
 

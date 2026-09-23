@@ -8,6 +8,8 @@ export default tseslint.config(
   {
     rules: {
       quotes: ['error', 'single'],
+      semi: ['error', 'always'],
+      indent: ['error', 2]
     },
   }
 );
