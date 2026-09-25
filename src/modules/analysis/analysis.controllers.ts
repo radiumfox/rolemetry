@@ -2,6 +2,11 @@ import {mapError} from '@/lib/errors/mapper.js';
 import { getQueries } from '@/lib/db/queries.js';
 import { type Request, type Response } from 'express';
 import {ANALYSIS_ALLOWED_FIELDS} from './config.js';
+import {
+  CreateAnalysisInput,
+  DeleteAnalysisByIdInput,
+  GetAnalysisByIdInput
+} from '@/modules/analysis/analysis.schemas.js';
 
 const {
   getAll,
@@ -23,7 +28,7 @@ export const getAnalyses = function (req: Request, res: Response) {
 };
 
 
-export const getAnalysisById = function (req: Request, res: Response) {
+export const getAnalysisById = function (req: Request<GetAnalysisByIdInput>, res: Response) {
   const id = req.params.id;
 
   if(!id || typeof id !== 'string') {
@@ -41,7 +46,7 @@ export const getAnalysisById = function (req: Request, res: Response) {
   });
 };
 
-export const createAnalysis = function (req: Request, res: Response) {
+export const createAnalysis = function (req: Request<object, object, CreateAnalysisInput>, res: Response) {
   const id = req.body.id;
   const file_name = req.body.file_name;
   const extracted_text = req.body.extracted_text;
@@ -66,7 +71,7 @@ export const createAnalysis = function (req: Request, res: Response) {
   );
 };
 
-export const deleteAnalysis = function (req: Request, res: Response) {
+export const deleteAnalysis = function (req: Request<DeleteAnalysisByIdInput>, res: Response) {
   const id = req.params.id;
 
   if (!id || typeof id !== 'string') {

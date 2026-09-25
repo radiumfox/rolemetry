@@ -9,8 +9,6 @@ import { env } from '@/config/env.js';
 
 export const app = express();
 
-app.use(`${API_PREFIX}/analyses`, analysisRouter);
-
 app.disable('x-powered-by');
 
 app.use(helmet());
@@ -26,3 +24,5 @@ app.use(
     legacyHeaders: false,
   })
 );
+
+app.use(`${API_PREFIX}/analyses`, analysisRouter);
