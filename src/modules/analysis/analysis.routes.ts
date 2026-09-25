@@ -1,98 +1,112 @@
-import express, { type Request, type Response } from 'express';
-import { getQueries } from '@/lib/db/queries.js';
-import { mapError } from '@/lib/errors/mapper.js';
+import express from 'express';
+import { createAnalysis, deleteAnalysis, getAnalyses, getAnalysisById } from '@/modules/analysis/analysis.controllers.js';
+import { validateBody } from '@/lib/validation/validateBody.js';
+import {
+  createAnalysisSchema,
+  deleteAnalysisByIdSchema,
+  getAnalysisByIdSchema
+} from '@/modules/analysis/analysis.schemas.js';
+import { validateParams } from '@/lib/validation/validateParams.js';
 
 export const analysisRouter = express.Router();
 
-const {
-  getAll,
-  getSingleById,
-  addSingle,
-  deleteSingleById
-} = getQueries('analyses');
+/**
+ * @openapi
+ * /api/v1/analyses:
+ *   get:
+ *     tags:
+ *       - Analyses
+ *     summary: List analyses
+ *     operationId: getAnalyses
+ *     responses:
+ *       '200':
+ *         description: Analyses returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Analysis'
+ *       default:
+ *         $ref: '#/components/responses/ApiError'
+ */
+analysisRouter.get('/', getAnalyses);
 
 /**
- * Get all analysis
+ * @openapi
+ * '/api/v1/analyses/{id}':
+ *   get:
+ *     tags:
+ *       - Analyses
+ *     summary: Get an analysis by id
+ *     operationId: getAnalysisById
+ *     parameters:
+ *       - $ref: '#/components/parameters/AnalysisId'
+ *     responses:
+ *       '200':
+ *         description: Analysis returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Analysis'
+ *       '400':
+ *         $ref: '#/components/responses/ValidationError'
+ *       default:
+ *         $ref: '#/components/responses/ApiError'
  */
-analysisRouter.get('/', async (req: Request, res: Response) => {
-  getAll((error, result) => {
-    if (error) {
-      const { status, code, message } = mapError(error);
-
-      res.status(status).json({ status, code, message });
-    } else {
-      res.status(200).json(result);
-    }
-  });
-});
+analysisRouter.get('/:id', validateParams(getAnalysisByIdSchema), getAnalysisById);
 
 /**
- * Get analysis by id
+ * @openapi
+ * /api/v1/analyses:
+ *   post:
+ *     tags:
+ *       - Analyses
+ *     summary: Create an analysis
+ *     operationId: createAnalysis
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateAnalysisRequest'
+ *     responses:
+ *       '201':
+ *         description: Analysis created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Analysis'
+ *       '400':
+ *         $ref: '#/components/responses/ValidationError'
+ *       '409':
+ *         $ref: '#/components/responses/ApiError'
+ *       default:
+ *         $ref: '#/components/responses/ApiError'
  */
-analysisRouter.get('/:id', (req: Request, res: Response) => {
-  const id = req.params.id;
-
-  if(!id || typeof id !== 'string') {
-    return res.status(400).json({ message: 'id is missing or invalid' });
-  }
-
-  getSingleById(id, (error, result) => {
-    if (error) {
-      const { status, code, message } = mapError(error);
-
-      res.status(status).json({ status, code, message });
-    } else {
-      res.status(200).json(result);
-    }
-  });
-});
+analysisRouter.post('/', validateBody(createAnalysisSchema), createAnalysis);
 
 /**
- * Create a new analysis
+ * @openapi
+ * '/api/v1/analyses/{id}':
+ *   delete:
+ *     tags:
+ *       - Analyses
+ *     summary: Delete an analysis by id
+ *     operationId: deleteAnalysisById
+ *     parameters:
+ *       - $ref: '#/components/parameters/AnalysisId'
+ *     responses:
+ *       '200':
+ *         description: Analysis deletion result
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeleteAnalysisResponse'
+ *       '400':
+ *         $ref: '#/components/responses/ValidationError'
+ *       default:
+ *         $ref: '#/components/responses/ApiError'
  */
-analysisRouter.post('/', (req: Request, res: Response) => {
-  const id = req.body.id;
-  const file_name = req.body.file_name;
-  const extracted_text = req.body.extracted_text;
-  const job_description = req.body.job_description;
-  const score = req.body.score;
-  const breakdown = req.body.breakdown;
-  const suggestions = req.body.suggestions;
-  const created_at = req.body.created_at;
-
-  addSingle(
-    ['id', 'file_name', 'extracted_text', 'job_description', 'score', 'breakdown', 'suggestions', 'created_at'],
-    [id, file_name, extracted_text, job_description, score, breakdown, suggestions, created_at],
-    (error, result) => {
-      if (error) {
-        const { status, code, message } = mapError(error);
-
-        return res.status(status).json({ status, code, message });
-      }
-
-      res.status(201).json(result);
-    }
-  );
-});
-
-/**
- * Delete analysis by id
- */
-analysisRouter.delete('/:id', (req: Request, res: Response) => {
-  const id = req.params.id;
-
-  if (!id || typeof id !== 'string') {
-    return res.status(400).json({ message: 'id is missing or invalid' });
-  }
-
-  deleteSingleById(id, (error, deleted) => {
-    if (error) {
-      const { status, code, message } = mapError(error);
-
-      return res.status(status).json({ status, code, message });
-    }
-
-    res.status(200).json({ deleted });
-  });
-});
+analysisRouter.delete('/:id', validateParams(deleteAnalysisByIdSchema), deleteAnalysis);
 

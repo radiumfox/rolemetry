@@ -1,15 +1,17 @@
+
 import { API_PREFIX } from './config/constants.js';
 import { analysisRouter } from '@/modules/analysis/index.js';
 import cors from 'cors';
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
 
 import { env } from '@/config/env.js';
+import {swaggerJsdocOptions} from '@/config/swaggerJsdocOptions.js';
 
 export const app = express();
-
-app.use(`${API_PREFIX}/analyses`, analysisRouter);
 
 app.disable('x-powered-by');
 
@@ -26,3 +28,13 @@ app.use(
     legacyHeaders: false,
   })
 );
+
+const specs = swaggerJsdoc(swaggerJsdocOptions);
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(specs, { explorer: true })
+);
+
+app.use(`${API_PREFIX}/analyses`, analysisRouter);

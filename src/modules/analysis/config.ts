@@ -1,0 +1,1 @@
+export const ANALYSIS_ALLOWED_FIELDS: Readonly<string[]> = ['id', 'file_name', 'extracted_text', 'job_description', 'score', 'breakdown', 'suggestions', 'created_at'];
