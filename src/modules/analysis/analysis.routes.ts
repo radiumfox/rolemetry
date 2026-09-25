@@ -11,22 +11,102 @@ import { validateParams } from '@/lib/validation/validateParams.js';
 export const analysisRouter = express.Router();
 
 /**
- * Get all analysis
+ * @openapi
+ * /api/v1/analyses:
+ *   get:
+ *     tags:
+ *       - Analyses
+ *     summary: List analyses
+ *     operationId: getAnalyses
+ *     responses:
+ *       '200':
+ *         description: Analyses returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Analysis'
+ *       default:
+ *         $ref: '#/components/responses/ApiError'
  */
 analysisRouter.get('/', getAnalyses);
 
 /**
- * Get analysis by id
+ * @openapi
+ * '/api/v1/analyses/{id}':
+ *   get:
+ *     tags:
+ *       - Analyses
+ *     summary: Get an analysis by id
+ *     operationId: getAnalysisById
+ *     parameters:
+ *       - $ref: '#/components/parameters/AnalysisId'
+ *     responses:
+ *       '200':
+ *         description: Analysis returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Analysis'
+ *       '400':
+ *         $ref: '#/components/responses/ValidationError'
+ *       default:
+ *         $ref: '#/components/responses/ApiError'
  */
 analysisRouter.get('/:id', validateParams(getAnalysisByIdSchema), getAnalysisById);
 
 /**
- * Create a new analysis
+ * @openapi
+ * /api/v1/analyses:
+ *   post:
+ *     tags:
+ *       - Analyses
+ *     summary: Create an analysis
+ *     operationId: createAnalysis
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateAnalysisRequest'
+ *     responses:
+ *       '201':
+ *         description: Analysis created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Analysis'
+ *       '400':
+ *         $ref: '#/components/responses/ValidationError'
+ *       '409':
+ *         $ref: '#/components/responses/ApiError'
+ *       default:
+ *         $ref: '#/components/responses/ApiError'
  */
 analysisRouter.post('/', validateBody(createAnalysisSchema), createAnalysis);
 
 /**
- * Delete analysis by id
+ * @openapi
+ * '/api/v1/analyses/{id}':
+ *   delete:
+ *     tags:
+ *       - Analyses
+ *     summary: Delete an analysis by id
+ *     operationId: deleteAnalysisById
+ *     parameters:
+ *       - $ref: '#/components/parameters/AnalysisId'
+ *     responses:
+ *       '200':
+ *         description: Analysis deletion result
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeleteAnalysisResponse'
+ *       '400':
+ *         $ref: '#/components/responses/ValidationError'
+ *       default:
+ *         $ref: '#/components/responses/ApiError'
  */
 analysisRouter.delete('/:id', validateParams(deleteAnalysisByIdSchema), deleteAnalysis);
 
